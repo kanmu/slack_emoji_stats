@@ -30,3 +30,9 @@ result.txtはデバッグ用です。集計用途にはresult.csvのみ利用す
     - `groups:read`
     - `im:read`
     - `mpim:read`
+
+
+## 参考リンク
+- [Web API methods | Slack](https://api.slack.com/methods)
+- [slack_sdk API documentation](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
+- [社内でのSlack絵文字使用頻度を集計してみた！ ｜ 株式会社プロトソリューション](https://www.protosolution.co.jp/approach/fuku-lab/20230914)
