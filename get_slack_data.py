@@ -57,7 +57,6 @@ for channel in channel_list:
 
         for message in messages:
             user_id = message.get("user")
-            print(user_id)
 
             if not (user_id in emoji_counts_per_user):  # キーがない場合は空の辞書で初期化
                 emoji_counts_per_user[user_id] = {}
