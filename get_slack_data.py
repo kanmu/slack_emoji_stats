@@ -9,6 +9,7 @@ SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 
 client = WebClient(token=SLACK_API_TOKEN, retry_handlers=all_builtin_retry_handlers())
 
+
 # メッセージを全件取得する関数
 def get_all_messages(channel_id):
     all_messages = []
