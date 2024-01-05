@@ -6,10 +6,10 @@ slackのemoji集計のために使うスクリプト。
 
 ## 利用方法
 
-### get_slack_data.pyスクリプト
+### get_emoji_stats.pyスクリプト
 ```
 pip3 install -r requirements.txt
-SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 get_slack_data.py
+SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 get_emoji_stats.py
 ```
 result.csv, result.txtというファイルが出力されます。
 result.txtはデバッグ用です。集計用途にはresult.csvのみ利用すれば良いでしょう。
