@@ -36,3 +36,4 @@ result.txtはデバッグ用です。集計用途にはresult.csvのみ利用す
 - [Web API methods | Slack](https://api.slack.com/methods)
 - [slack_sdk API documentation](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
 - [社内でのSlack絵文字使用頻度を集計してみた！ ｜ 株式会社プロトソリューション](https://www.protosolution.co.jp/approach/fuku-lab/20230914)
+- [Bolt for Pythonを使ったSlackアプリでratelimitedエラーに対応するには #Python - Qiita](https://qiita.com/geeorgey/items/eff73ea4c045ef4633d1)
