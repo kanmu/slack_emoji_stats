@@ -34,7 +34,23 @@ def get_all_messages(channel_id):
 
         if response["ok"]:
             messages = response["messages"]
-            all_messages.extend(messages)
+
+            # threadのparentの場合はthreadのメッセージも取得
+            # cf. https://api.slack.com/messaging/retrieving#threading
+
+            for message in messages:
+                if message.get("thread_ts"):
+                    if message.get("ts") == message.get("thread_ts"):
+                        print("Fetching replies...")
+                        response_replies = client.conversations_replies(
+                                channel=channel_id,
+                                ts=message.get("ts"),
+                        )
+
+                        if response_replies["ok"]:
+                            messages.extend(response_replies["messages"])
+                else:
+                    all_messages.append(message)
 
             if response["has_more"]:
                 print("Fetching more messages...")
