@@ -70,7 +70,7 @@ emoji_counts_per_user = {}
 
 
 # チャンネル数に合わせて limitを変更
-channel_list = client.conversations_list(limit=500)["channels"]
+channel_list = client.conversations_list(limit=1000)["channels"]
 channel_json_list = []
 
 
