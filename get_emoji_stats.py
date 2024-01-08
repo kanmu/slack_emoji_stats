@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 from datetime import datetime
 
@@ -8,6 +9,15 @@ from slack_sdk.web import WebClient
 SLACK_API_TOKEN = os.environ["SLACK_API_TOKEN"]
 
 client = WebClient(token=SLACK_API_TOKEN, retry_handlers=all_builtin_retry_handlers())
+
+
+# ファイルの存在確認をする関数
+def file_exists(file_path):
+    try:
+        with open(file_path):
+            return True
+    except FileNotFoundError:
+        return False
 
 
 # メッセージを全件取得する関数
@@ -45,10 +55,19 @@ emoji_counts_per_user = {}
 
 # チャンネル数に合わせて limitを変更
 channel_list = client.conversations_list(limit=500)["channels"]
+channel_json_list = []
 
 
 for channel in channel_list:
     channel_id = channel["id"]
+    channel_name = channel["name"]
+
+    json_file_path = f"result_dir/{channel_id}_{channel_name}.json"
+    channel_json_list.append(json_file_path)
+
+    if file_exists(json_file_path):
+        continue
+
     # 各チャンネルのメッセージを全件取得
 
     print("channel loop ===================", channel_id)
@@ -74,9 +93,33 @@ for channel in channel_list:
                     emoji_counts_per_user[user_id][emoji_name] = 0
                 emoji_counts_per_user[user_id][emoji_name] += emoji["count"]
 
+        # 結果をファイルに保存
+        with open(json_file_path, "w") as f:
+            json.dump(emoji_counts_per_user, f, indent=2)
+
     except Exception as e:
         print("An error occurred:", channel_id, e)
 
+    finally:
+        emoji_counts_per_user = {}
+
+
+emoji_counts_per_user = {}
+
+# チャンネルごとの結果をロード
+
+for json_file_path in channel_json_list:
+    with open(json_file_path) as f:
+        emoji_counts_per_user_one_channel = json.load(f)
+
+    for user_id, emoji_dict in emoji_counts_per_user_one_channel.items():
+        if not (user_id in emoji_counts_per_user):
+            emoji_counts_per_user[user_id] = {}
+
+        for emoji_name, count in emoji_dict.items():
+            if not (emoji_name in emoji_counts_per_user[user_id]):
+                emoji_counts_per_user[user_id][emoji_name] = 0
+            emoji_counts_per_user[user_id][emoji_name] += count
 
 print("csv start ===================")
 
