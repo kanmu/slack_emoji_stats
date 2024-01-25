@@ -29,7 +29,7 @@ def get_all_messages(channel_id):
         response = client.conversations_history(
             channel=channel_id,
             cursor=cursor,
-            oldest=datetime(2023, 1, 1).timestamp,  # 2023年1月1日以降のメッセージを取得
+            oldest=datetime(2023, 1, 1).timestamp(),  # 2023年1月1日以降のメッセージを取得
         )
 
         if response["ok"]:
@@ -38,19 +38,21 @@ def get_all_messages(channel_id):
             # threadのparentの場合はthreadのメッセージも取得
             # cf. https://api.slack.com/messaging/retrieving#threading
 
-            for message in messages:
-                if message.get("thread_ts"):
-                    if message.get("ts") == message.get("thread_ts"):
-                        print("Fetching replies...")
-                        response_replies = client.conversations_replies(
-                                channel=channel_id,
-                                ts=message.get("ts"),
-                        )
+            # for message in messages:
+            #     if message.get("thread_ts"):
+            #         if message.get("ts") == message.get("thread_ts"):
+            #             print("Fetching replies...")
+            #             response_replies = client.conversations_replies(
+            #                     channel=channel_id,
+            #                     ts=message.get("ts"),
+            #             )
 
-                        if response_replies["ok"]:
-                            messages.extend(response_replies["messages"])
-                else:
-                    all_messages.append(message)
+            #             if response_replies["ok"]:
+            #                 messages.extend(response_replies["messages"])
+            #     else:
+            #         all_messages.append(message)
+
+            all_messages.extend(messages)
 
             if response["has_more"]:
                 print("Fetching more messages...")
@@ -125,6 +127,9 @@ emoji_counts_per_user = {}
 # チャンネルごとの結果をロード
 
 for json_file_path in channel_json_list:
+    if not file_exists(json_file_path):
+        continue
+
     with open(json_file_path) as f:
         emoji_counts_per_user_one_channel = json.load(f)
 
