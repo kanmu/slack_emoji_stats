@@ -2,17 +2,30 @@
 
 slackのemoji集計のために使うスクリプト。
 現状は特定期間の間に各ユーザーが獲得したemojiの集計に使えるのみです。
-例えば、特定期間で特定emojiのランキングを出す、という用途では使えません。スクリプト追加してくれると嬉しいです。
+例えば、特定期間で特定emojiのランキングを出すところまでは実装していません。スクリプト追加してくれると嬉しいです。
+
 
 ## 利用方法
 
 ### get_emoji_stats.pyスクリプト
 ```
 pip3 install -r requirements.txt
-SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 get_emoji_stats.py
+
+# channel_listが10分割されて出力される
+SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 save_channel_list.py
+
+# どのchannel_listを処理するのかを引数(0~9)で渡す. 並列で動かすのはおすすめしない。rate limitにより。
+SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 get_emoji_stats_per_channel_list.py 0
+
+# user単位で集計する
+SLACK_API_TOKEN=<YOUR_PERSONAL_TOKEN> python3 aggregate_csv_stats.py
+
+# 必要なemojiだけに絞り込む
+python3 csv_minify.py
 ```
-result.csv, result.txtというファイルが出力されます。
-result.txtはデバッグ用です。集計用途にはresult.csvのみ利用すれば良いでしょう。
+result.csv, result2.csvというファイルが出力されます。
+各scriptで、input_dir/output_dirなどの変数があるので、その値を更新することで、出力先を変更することができます
+
 
 ## 事前準備
 - python3をローカルにインストールしてください。
